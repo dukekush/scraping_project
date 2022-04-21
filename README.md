@@ -1,0 +1,1 @@
+This is an instruction how to run scrapers!
