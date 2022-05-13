@@ -3,22 +3,26 @@ from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 import re
 
+
+#  class for saving results of crawler
 class Car(scrapy.Item):
-    price = scrapy.Field()
-    make = scrapy.Field()
-    model = scrapy.Field()
-    year = scrapy.Field()
-    km = scrapy.Field()
-    power = scrapy.Field()
-    color = scrapy.Field()
-    fuel = scrapy.Field()
-    cap = scrapy.Field()
-    trans = scrapy.Field()
-    drive = scrapy.Field()
+    price   = scrapy.Field()
+    make    = scrapy.Field()
+    model   = scrapy.Field()
+    year    = scrapy.Field()
+    km      = scrapy.Field()
+    power   = scrapy.Field()
+    color   = scrapy.Field()
+    fuel    = scrapy.Field()
+    cap     = scrapy.Field()
+    trans   = scrapy.Field()
+    drive   = scrapy.Field()
 
 class LinksSpider(CrawlSpider):
     name = 'cars_final'
     allowed_domains = ['www.otomoto.pl']
+
+    #  retrieving links pages to scrape
     try:
         with open("links.csv", "rt") as f:
             start_urls = [url.strip() for url in f.readlines()][1:]
@@ -27,10 +31,13 @@ class LinksSpider(CrawlSpider):
 
     print(start_urls)
 
+    # rule below allows us to follow any link containing words "oferta" from each of start_urls,
+    # because of this on each numbered paged crawler will go to many subpages, and the scrape data from them
     rules = (
         Rule(LinkExtractor(allow="oferta"), callback='parse'), 
     )
 
+    # method for scraping data and saving it to scrapy.Item
     def parse(self, response):
         car = Car()
         car['price']  =  re.sub('\W+', '', response.xpath('//*[@class="offer-price__number"]/text()').get())
