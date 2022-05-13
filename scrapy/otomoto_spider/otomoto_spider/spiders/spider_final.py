@@ -1,4 +1,3 @@
-from subprocess import call
 import scrapy
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
@@ -12,6 +11,10 @@ class Car(scrapy.Item):
     km = scrapy.Field()
     power = scrapy.Field()
     color = scrapy.Field()
+    fuel = scrapy.Field()
+    cap = scrapy.Field()
+    trans = scrapy.Field()
+    drive = scrapy.Field()
 
 class LinksSpider(CrawlSpider):
     name = 'cars_final'
@@ -22,11 +25,8 @@ class LinksSpider(CrawlSpider):
     except:
         start_urls = []
 
-    # start_urls = ['https://www.otomoto.pl/osobowe/seg-cabrio?page=1',
-    #                 'https://www.otomoto.pl/osobowe/seg-cabrio?page=2',
-    #                 'https://www.otomoto.pl/osobowe/seg-cabrio?page=3]']
-
     print(start_urls)
+
     rules = (
         Rule(LinkExtractor(allow="oferta"), callback='parse'), 
     )
@@ -40,4 +40,8 @@ class LinksSpider(CrawlSpider):
         car['km']     =  re.sub('\W+','',response.xpath("//*[contains(text(), 'Przebieg')]/../div/text()").get())
         car['power']  =  re.sub('\W+','',response.xpath("//*[contains(text(), 'Moc')]/../div/text()").get())
         car['color']  =  re.sub('\W+','',response.xpath("//*[contains(text(), 'Kolor')]/../div/a/text()").get())
+        car['fuel']   =  re.sub('\W+','',response.xpath("//*[contains(text(), 'Rodzaj paliwa')]/../div/a/text()").get())
+        car['cap']    =  re.sub('\W+','',response.xpath("//*[contains(text(), 'Pojemność skokowa')]/../div/text()").get())
+        car['trans']  =  re.sub('\W+','',response.xpath("//*[contains(text(), 'Skrzynia biegów')]/../div/a/text()").get())
+        car['drive']  =  re.sub('\W+','',response.xpath("//*[contains(text(), 'Napęd')]/../div/a/text()").get())
         yield car

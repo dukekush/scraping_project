@@ -14,6 +14,7 @@ class LinkListsSpider(scrapy.Spider):
     def parse(self, response):
         xpath = '//*[@id="__next"]/div/div/div/div[2]/div[2]/div[2]/div[1]/div[3]/div[4]/ul/li[last()-1]/a/span/text()'
         total_pages = response.xpath(xpath).get()
+        print(total_pages, type(total_pages))
         for n in range(1, int(total_pages) + 1):
             l = Link()
             l['link'] = 'https://www.otomoto.pl/osobowe/seg-cabrio?page={}'.format(n)
