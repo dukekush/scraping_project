@@ -1,11 +1,10 @@
 import scrapy
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
-from scrapy.exceptions import CloseSpider
 import re
 
 
-# set variable below to True to limit crawler to scrap about 100 offers
+# set variable below to True to limit crawler to scrape about 100 offers (limits crawler to first 4 numbered pages)
 LIMIT_ITEMS = True
 
 
@@ -31,12 +30,12 @@ class LinksSpider(CrawlSpider):
     # retrieving links pages to scrape
     try:
         with open("data/links.csv", "rt") as f:
-            start_urls = [url.strip() for url in f.readlines()][1:]
+            if LIMIT_ITEMS:
+                start_urls = [url.strip() for url in f.readlines()][1:5]
+            else:
+                tart_urls = [url.strip() for url in f.readlines()][1:]
     except:
         start_urls = []
-
-    if LIMIT_ITEMS:
-        custom_settings = {'CLOSESPIDER_ITEMCOUNT': 100}
 
     # rule below allows us to follow any link containing words "oferta" from each of start_urls,
     # because of this on each numbered paged crawler will go to many subpages with offers, and the scrape data from them
@@ -47,7 +46,7 @@ class LinksSpider(CrawlSpider):
     # method for scraping data and saving it to scrapy.Item
     def parse(self, response):
         car = Car()
-        
+
         try:
             car['price']  =  re.sub('\W+', '', response.xpath('//*[@class="offer-price__number"]/text()').get())
         except:
