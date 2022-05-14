@@ -17,7 +17,7 @@ cd scrapy/otomoto_spider
 ```
 scrapy crawl links -O 'data/links.csv'
 ```
-3. Run crawler to get cars data. You can change LIMIT_ITEMS to False, in spider_final.py (line 8) to scrape all available data.
+3. Run crawler to get cars data. You can change <strong>LIMIT_ITEMS</strong> to False, in spider_final.py (line 8) to scrape all available data.
 ```
 scrapy crawl cars -O 'data/cars.csv'
 ```
