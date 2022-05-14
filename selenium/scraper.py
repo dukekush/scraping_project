@@ -61,11 +61,13 @@ while True:
 	except:
 		pass
 
+	# To remove duplicates
+	links_list = list(dict.fromkeys(links_list))
+
 	if limit_pages == True and len(links_list) > 100: # The condition to stop the infinite loop
 		break
 
-# To remove duplicates and reduce number of pages to scrape:
-links_list = list(dict.fromkeys(links_list))
+# To reduce number of pages to scrape:
 if limit_pages == True:
 	links_list = links_list[:100]
 
@@ -177,4 +179,4 @@ data = pd.DataFrame({"Make": make_list, "Model": model_list, "Price [PLN]": pric
 					"Driven distance [km]": driven_list, "Color": color_list, "Year of production": year_list, "Fuel": fuel_list,
 					"Engine capacity [cm^3]": capacity_list, "Transmission type": transmission_list, "Drive type": drive_list})
 
-print(data)
+data.to_csv("dane_otomoto.csv")
