@@ -1,8 +1,9 @@
-from urllib import request
-from bs4 import BeautifulSoup as BS
-import pandas as pd
-import numpy as np
 import random
+from urllib import request
+
+import numpy as np
+import pandas as pd
+from bs4 import BeautifulSoup as BS
 
 limit = True
 
@@ -14,7 +15,7 @@ bs = BS(html.read(), "html.parser")
 n_pages = bs.find_all("li", {"data-testid": "pagination-list-item"})[-1].span.text
 n_pages = int(n_pages)
 
-#Create set with offer links (set because we want to get unique offers links)
+# Create set with offer links (set because we want to get unique offers links)
 offers_links = set()
 for i in range(n_pages):
     # Open page with offers
